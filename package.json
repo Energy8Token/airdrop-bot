@@ -1,0 +1,16 @@
+{
+  "name": "airdrop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "dedent": "^0.7.0",
+    "dotenv": "^9.0.2",
+    "nodejs-captcha": "^0.0.6",
+    "telegraf": "3.38.0",
+    "telegraf-broadcast": "^2.4.5",
+    "telegraf-session-local": "^2.1.0",
+    "telegram-keyboard": "^2.2.6",
+    "web3": "^1.3.6"
+  }
+}
