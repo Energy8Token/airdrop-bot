@@ -8,7 +8,7 @@ const getAllMembers = async () => {
     const wallets = members.map(session => session.data.wallet)
     const tokens = members.map(session => session.data.tokens)
 
-    return { wallets, tokens }
+    return { members, wallets, tokens }
 }
 
 module.exports = getAllMembers

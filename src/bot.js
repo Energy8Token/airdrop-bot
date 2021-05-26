@@ -49,7 +49,7 @@ bot.start(async (ctx) => {
 
     const referralId = parseInt(ctx.startPayload)
 
-    if (referralId && referralId != ctx.from.id && !ctx.session.referrals.includes(referralId) && !ctx.session.isReferral) {
+    if (referralId && referralId != ctx.from.id && !ctx.session.isReferral && !ctx.session.referrals.includes(referralId)) {
         const referral = await localSession.DB
             .get('sessions')
             .find({ id: `${referralId}:${referralId}` })

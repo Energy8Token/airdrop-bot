@@ -13,11 +13,11 @@ const scene = new WizardScene('airdrop',
         ctx.session.captchaIsCompleted = false
 
         await ctx.reply(dedent`
-            Подпишитесь на наши телеграм каналы
+            1️⃣ Join our Telegram groups:
     
-            @energy8rus
-            @energy8eng
-        `, Keyboard.reply('Check'))
+            <b>Energy 8 (E8)</b> 🌍: @energy8eng
+            <b>Energy 8</b> 🇷🇺: @energy8rus
+        `, Keyboard.reply('Check', {}, { parse_mode: 'HTML' }))
 
         return ctx.wizard.next()
     },
@@ -26,17 +26,17 @@ const scene = new WizardScene('airdrop',
         const isMember2 = await isMemberOfGroup(ctx, '@energy8eng')
     
         if (!isMember1 || !isMember2) {
-            return ctx.reply('Loh')
+            return ctx.reply('❗️ Looks like you have not joined the groups')
         }
         
         await ctx.reply(dedent`
-            Подпишитесь на твиттер @energy8rus и введите свой никнейм для проверки подписки
-        `, Keyboard.remove())
+            2️⃣ Subscribe to our twitter <a href='https://twitter.com/Energy8com'>@Energy8com</a> and enter your twitter nickname to verify subscription 
+        `, { parse_mode: 'HTML', disable_web_page_preview: true, ...Keyboard.remove() })
 
         return ctx.wizard.next()
     }),
     async (ctx) => {
-        await ctx.reply('Отлично, теперь пройдите капчу')
+        await ctx.reply('3️⃣ Please, pass the captcha')
     
         const captcha = createCaptcha()
     
@@ -48,13 +48,13 @@ const scene = new WizardScene('airdrop',
     },
     async (ctx) => {
         if (ctx.message.text !== ctx.session.captchaValue) {
-            return ctx.reply('Captcha wrong!')
+            return ctx.reply('❗️ Wrong code...')
         }
 
         ctx.session.captchaIsCompleted = true
         ctx.session.captchaValue = null
 
-        await ctx.reply('Теперь введите свой кошелек')
+        await ctx.reply('Enter your Energy 8 (E8) wallet address')
 
         return ctx.wizard.next()
     },
@@ -62,26 +62,41 @@ const scene = new WizardScene('airdrop',
         const wallet = ctx.message.text
     
         if (!Web3.utils.isAddress(wallet)) {
-            return ctx.reply('Wallet wrong')
+            return ctx.reply('❗️ Invalid wallet...')
         }
 
         const members = await getAllMembers()
 
         if (members.wallets.length >= 1000) {
-            await ctx.reply('К сожалению всё')
+            await ctx.reply(dedent`
+                Unfortunately, the airdrop has already ended 😔
+
+                Subscribe to our news channel @enrg8news, so you don't miss out on airdrops in the future
+            `)
 
             return ctx.scene.enter('menu')
         }
 
         if (members.wallets.includes(wallet)) {
-            return ctx.reply('Этот кошелек уже был зарегистрирован')
+            return ctx.reply('❗️ This wallet has already been registered')
         }
 
         ctx.session.wallet = wallet
 
         ctx.session.tokens += 250000000
 
-        await ctx.reply('Ты зарегался, а теперь когда-то получишь свои N монет')
+        await ctx.reply(dedent`
+            Thank you ${ctx.from.first_name || ctx.from.username}!
+
+            You registered successfully and you've received <b>250 000 000 Energy 8 (E8)</b> for completing airdrop tasks.
+            
+            Also you can share your referral link and get <b>50 000 000 E8</b> for each referral
+            Your referral link: https://t.me/energy_airdrop_bot?start=${ctx.from.id}
+
+            <b>The airdrop will end on June 10, after which you will receive coins to your wallet</b>
+
+            <i>DM to the @Ballet228 if you entered the wrong Energy 8 (E8) wallet</i>
+        `, { parse_mode: 'HTML', disable_web_page_preview: true })
 
         return ctx.scene.enter('menu')
     }
