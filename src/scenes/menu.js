@@ -38,13 +38,15 @@ scene.hears('Airdrop Status', async ctx => {
     `, { parse_mode: 'HTML', disable_web_page_preview: true })
 })
 
+const numberWithSpaces = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+
 scene.hears('Profile', async ctx => {
     return ctx.reply(dedent`
-        ⚡️ <b>Balance:</b> ${ctx.session.tokens} E8
+        ⚡️ <b>Balance:</b> ${numberWithSpaces(ctx.session.tokens)} E8
         👥 <b>Referrals:</b> ${ctx.session.referrals.length}
+        💼 <b>Wallet:</b> ${ctx.session.wallet ? `<code>${ctx.session.wallet}</code>` : 'Not registered'}
 
-        Get <b>50 000 000 E8</b> for each referral!
-        Your referral link: https://t.me/energy_airdrop_bot?start=${ctx.from.id}
+        Get <b>50 000 000 E8</b> for each referral! <b>Your referral link:</b> https://t.me/energy_airdrop_bot?start=${ctx.from.id}
     `, { parse_mode: 'HTML', disable_web_page_preview: true })
 })
 
