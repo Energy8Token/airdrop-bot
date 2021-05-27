@@ -17,6 +17,8 @@ const scene = new WizardScene('airdrop',
     
             <b>Energy 8 (E8)</b> 🌍: @energy8eng
             <b>Energy 8</b> 🇷🇺: @energy8rus
+
+            ❗️ Attention! Until the end of the airdrop, you cannot unsubscribe from these groups, otherwise you will not receive coins
         `, Keyboard.reply('Check', {}, { parse_mode: 'HTML' }))
 
         return ctx.wizard.next()
@@ -30,7 +32,7 @@ const scene = new WizardScene('airdrop',
         }
         
         await ctx.reply(dedent`
-            2️⃣ Subscribe to our twitter <a href='https://twitter.com/Energy8com'>@Energy8com</a> and enter your twitter nickname to verify subscription 
+            2️⃣ Subscribe to our twitter <a href='https://twitter.com/Energy8Token'>@Energy8Token</a> and enter your twitter nickname to verify subscription 
         `, { parse_mode: 'HTML', disable_web_page_preview: true, ...Keyboard.remove() })
 
         return ctx.wizard.next()
@@ -40,14 +42,14 @@ const scene = new WizardScene('airdrop',
     
         const captcha = createCaptcha()
     
-        ctx.session.captchaValue = captcha.value
+        ctx.session.captchaValue = captcha.value.toLowerCase()
     
         await ctx.replyWithPhoto({ source: Buffer.from(captcha.image.replace('data:image/jpeg;base64,', ''), 'base64') })
 
         return ctx.wizard.next()
     },
     async (ctx) => {
-        if (ctx.message.text !== ctx.session.captchaValue) {
+        if (!ctx.message || ctx.message.text.toLowerCase() !== ctx.session.captchaValue) {
             return ctx.reply('❗️ Wrong code...')
         }
 
@@ -96,10 +98,9 @@ const scene = new WizardScene('airdrop',
             <b>The airdrop will end on June 10, after which you will receive coins to your wallet</b>
 
             <i>DM to the @Ballet228 if you entered the wrong Energy 8 (E8) wallet</i>
-        `, { parse_mode: 'HTML', disable_web_page_preview: true })
-
-        return ctx.scene.enter('menu')
-    }
+        `, Keyboard.make('Menu').reply({ parse_mode: 'HTML', disable_web_page_preview: true }))
+    },
+    ctx => ctx.scene.enter('menu'),
 )
 
 scene.use((ctx, next) => {
@@ -109,5 +110,7 @@ scene.use((ctx, next) => {
 
     return next()
 })
+
+scene.command('/reset', ctx => ctx.scene.enter('menu'))
 
 module.exports = scene

@@ -1,16 +1,22 @@
-const dedent = require('dedent')
 const { BaseScene } = require('telegraf')
 const { Keyboard, Key } = require('telegram-keyboard')
+const dedent = require('dedent')
 
 const getAllMembers = require('../utils/getAllMembers')
 
 const scene = new BaseScene('menu')
 
 scene.enter(ctx => {
-    return ctx.reply('Menu', Keyboard.reply([
+    return ctx.reply(dedent`
+        Hello, Welcome to the ⚡️Energy 8 Airdrop!
+
+        💸 You can get up to <b>250 000 000 E8</b> for participating in our airdrop and <b>50 000 000 E8</b> for each person you refer
+
+        <i>If you get stuck at any stage, you can enter /reset command to reset state</i>
+    `, Keyboard.make([
         [Key.text('💸 Airdrop', !!ctx.session.wallet)],
         ['Profile', 'Airdrop Status'],
-    ]))
+    ]).reply({ parse_mode: 'HTML' }))
 })
 
 scene.hears('💸 Airdrop', ctx => {

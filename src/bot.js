@@ -38,6 +38,8 @@ bot.command('/airdrop', Telegraf.acl(admin, async (ctx) => {
 
 bot.use(scenes)
 
+bot.catch((err) => console.log('Catch: ', err))
+
 bot.start(async (ctx) => {
     if (!('referrals' in ctx.session)) {
         ctx.session.referrals = []
