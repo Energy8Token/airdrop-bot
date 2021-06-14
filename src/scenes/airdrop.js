@@ -95,7 +95,7 @@ const scene = new WizardScene('airdrop',
             Also you can share your referral link and get <b>50 000 000 E8</b> for each referral
             Your referral link: https://t.me/energy_airdrop_bot?start=${ctx.from.id}
 
-            <b>The airdrop will end on June 10, after which you will receive coins to your wallet</b>
+            <b>The airdrop will end on June 17, after which you will receive coins to your wallet</b>
 
             <i>DM to the @Ballet228 if you entered the wrong Energy 8 (E8) wallet</i>
         `, Keyboard.make('Menu').reply({ parse_mode: 'HTML', disable_web_page_preview: true }))
